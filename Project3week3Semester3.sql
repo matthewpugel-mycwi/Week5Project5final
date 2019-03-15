@@ -191,26 +191,26 @@ GO
 
 INSERT INTO disk
 	VALUES
-	('Crazy Train', '9-1-1980', 1, 1, 1, 1), -- disk name, release date,  genre id(CR1, CTY2,Jazz3,AltRock4,Metal5), status id(Avail1,Loan2,Dmgd3,Miss4), disk type id(CD1, Vinyl2, Strack3,Cass4,DVD5), art type (solo1, group2)
-	('Good Times', '10-14-1968', 2, 2, 2, 1),
-	('Fearless', '11-11-2008', 4, 1, 1, 1),
-	('No Fences', '7-27-1990', 2, 4, 3, 1),
-	('Its Not Unusual', '7-27-1965', 1, 1, 1, 1),
-	('Sonic Firestorm', '5-11-2004', 5, 1, 1, 2),
-	('Cargo', '5-2-1983', 1, 1, 1, 2),
-	('Astro Lounge', '6-8-1999', 4, 1, 1, 2),
-	('Music & Me', '4-13-1973', 1, 1, 1, 1),
-	('Songs About Jane', '6-25-2002', 4, 1, 1, 2),
-	('Kerplunk', '12-17-1991', 4, 1, 1, 2),
-	('The Colour and the Shape', '5-20-1997', 4, 1, 1, 2),
-	('Appetite for Destruction', '7-21-1987', 1, 1, 1, 2),
-	('Dressed to Kill', '3-19-1975', 1, 1, 3, 2),
-	('Hot Space', '5-21-1982', 1, 1, 1, 2),
-	('Come Fly with Me', '1-1-1958', 3, 1, 1, 2),
-	('Who Needs Pictures', '6-1-1999', 1, 1, 2, 1),
-	('Pot Luck', '6-5-1962', 1, 1, 1, 1),
-	('Greatest', '1-12-1959', 1, 1, 1, 1),
-	('Pin Ups', '10-19-1973', 1, 1, 1, 1)
+	('Crazy Train', '9-1-1980', 1, 1, 1), -- disk name, release date,  genre id(CR1, CTY2,Jazz3,AltRock4,Metal5), status id(Avail1,Loan2,Dmgd3,Miss4), disk type id(CD1, Vinyl2, Strack3,Cass4,DVD5), art type (solo1, group2)
+	('Good Times', '10-14-1968', 2, 2, 2),
+	('Fearless', '11-11-2008', 4, 1, 1),
+	('No Fences', '7-27-1990', 2, 4, 3),
+	('Its Not Unusual', '7-27-1965', 1, 1, 1),
+	('Sonic Firestorm', '5-11-2004', 5, 1, 1),
+	('Cargo', '5-2-1983', 1, 1, 1),
+	('Astro Lounge', '6-8-1999', 4, 1, 1),
+	('Music & Me', '4-13-1973', 1, 1, 1),
+	('Songs About Jane', '6-25-2002', 4, 1, 1),
+	('Kerplunk', '12-17-1991', 4, 1, 1),
+	('The Colour and the Shape', '5-20-1997', 4, 1, 1),
+	('Appetite for Destruction', '7-21-1987', 1, 1, 1),
+	('Dressed to Kill', '3-19-1975', 1, 1, 3),
+	('Hot Space', '5-21-1982', 1, 1, 1),
+	('Come Fly with Me', '1-1-1958', 3, 1, 1),
+	('Who Needs Pictures', '6-1-1999', 1, 1, 2),
+	('Pot Luck', '6-5-1962', 1, 1, 1),
+	('Greatest', '1-12-1959', 1, 1, 1),
+	('Pin Ups', '10-19-1973', 1, 1, 1)
 GO
 update disk 
 set releaseDate = '5/1/1995'
@@ -224,7 +224,7 @@ INSERT INTO diskHasBorrower
 		(3, 6, '1-29-2012', '2-20-2012'),
 		(2, 7, '1-22-2012', '2-20-2012'),
 		(5, 2, '1-1-2012', '2-20-2012'),
-		(5, 7, '1-11-2012', '2-20-2012'),
+		(5, 9, '1-11-2012', '2-20-2012'),
 		 (5, 8, '1-12-2012', '2-20-2012'),
 		 (6, 3, '1-21-2012', '2-20-2012'),
 		 (11, 14, '1-22-2012', NULL ), 
@@ -267,3 +267,62 @@ GO
 select * from diskHasBorrower
 where returned_date is null
 go
+--Project 4
+--Show the disks in your database and any associated Individual artists only. Sort by Artist Last Name, First Name & Disk Name.
+use disk_inventory
+go
+select disk_name as 'Disk Name', convert(varchar, releaseDate, 103) as 'Release Date', fname as 'Artist First Name',
+	lname as 'Artist Last Name'
+from disk
+join diskHasArtist on disk.disk_id = diskHasArtist.disk_id
+join Artist on diskHasArtist.artist_id = artist.artist_id
+--add order by & format the date
+order by lname, fname, disk_name
+
+--4. Create a view called View_Individual_Artist that shows the artists’ names and not group names. 
+--Include the artist id in the view definition but do not display the id in your output.
+drop view if exists View_Individual_Artist
+go
+CREATE VIEW View_Individual_Artist as
+	select artist_id, fname, lname
+	from Artist
+	where artist_type_id = 1
+go
+select fname as FirstName, lname as LastName
+from View_Individual_Artist
+--5. Show the disks in your database and any associated Group artists only. 
+--Use the View_Individual_Artist view. Sort by Group Name & Disk Name.
+select disk_name as 'Disk Name', convert(varchar, releaseDate, 103) as 'Release Date', fname as 'Group Name'
+from disk
+join diskHasArtist on disk.disk_id = diskHasArtist.disk_id
+join Artist on diskHasArtist.artist_id = artist.artist_id
+where Artist.artist_id != ALL --NOT IN 
+	(select artist_id from View_Individual_Artist)
+go
+
+--6. Show which disks have been borrowed and who borrowed them. 
+--Sort by Borrower’s Last Name, then First Name, then Disk Name, then Borrowed Date, then Returned Date.
+select fname as First, lname as Last, disk_name as 'Disk Name', convert(varchar, borrowed_date, 103) as 'Borrowed Date', 
+convert(varchar, returned_date, 103) as 'Returned Date'
+from borrower
+join diskHasBorrower on borrower.borrower_id = diskHasBorrower.borrower_id
+join disk on disk.disk_id = diskHasBorrower.disk_id
+--add order by and format the date
+group by lname, fname, disk_name, borrowed_date, returned_date
+go
+
+--7. In disk_id order, show the number of times each disk has been borrowed.
+select disk.disk_id as 'Disk ID', disk_name as 'Disk Name', count(*) as 'Times Borrowed'
+from disk
+join diskHasBorrower on disk.disk_id = diskHasBorrower.disk_id
+group by disk.disk_id, disk_name
+--add order by and aliases
+
+--8. Show the disks outstanding or on-loan and who has each disk. Sort by disk name.
+select disk_name as 'Disk Name', convert(varchar, borrowed_date, 103) as 'Date Borrowed', returned_date as 'Return Date', lname as 'Last Name'
+from disk
+join diskHasBorrower on disk.disk_id = diskHasBorrower.disk_id
+join borrower on diskHasBorrower.borrower_id = borrower.borrower_id
+where returned_date is null
+--add order and aliases
+order by disk_name
