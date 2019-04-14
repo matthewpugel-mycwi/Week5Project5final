@@ -1,0 +1,45 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>Disk Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder id="ContentHead" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    
+    <form id="form1" runat="server">
+  <header class="jumbotron">
+            <img src="Images/logo.png" alt="Disk Inventory" />
+                    <a class="navbar-brand" href="Default.aspx">Disk Inventory</a><ul class="nav navbar-nav">
+                        <li class="active"><a href="Default.aspx">Home</a></li>
+                        <li><a href="Artist.aspx">Artist</a></li>
+                        <li><a href="Borrower.aspx">Borrower</a></li>
+                        <li><a href="Disk.aspx">Disk</a></li>
+ </ul>
+        </header>
+    <div>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    &nbsp;</div>
+                </div>
+        </nav>
+        <asp:ContentPlaceHolder id="ContentPlaceMain" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+        <footer>
+               <asp:ContentPlaceHolder id="ContentPlaceFooter" runat="server">
+        
+        </asp:ContentPlaceHolder>
+        </footer>
+    </form>
+</body>
+</html>
