@@ -22,6 +22,8 @@
                         <li><a href="Artist.aspx">Artist</a></li>
                         <li><a href="Borrower.aspx">Borrower</a></li>
                         <li><a href="Disk.aspx">Disk</a></li>
+                        <li><a href="Report.aspx">Report</a></li>
+                        <li><a href="Checkout.aspx">Checkout an item</a></li>
  </ul>
         </header>
     <div>
