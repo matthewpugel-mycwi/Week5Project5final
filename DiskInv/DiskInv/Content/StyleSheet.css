@@ -2,5 +2,7 @@
     margin: 1em 1em 0 0;
     padding: 1em 0;
 }
+
 body {
+    background-image: linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c);
 }

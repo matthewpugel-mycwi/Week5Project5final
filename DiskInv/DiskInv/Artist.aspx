@@ -1,4 +1,10 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Artist.aspx.cs" Inherits="Artist" %>
+﻿<%--/********************************************************************/
+/*  Date	Name	Description                                 */
+/*  --------------------------------------------------------------- */
+/*                                                                  */
+/*  5/2/2019  Matthew Pugel   Program accepts input.     */
+/********************************************************************/--%>
+<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Artist.aspx.cs" Inherits="Artist" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentHead" Runat="Server">
 </asp:Content>

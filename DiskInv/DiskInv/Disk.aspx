@@ -1,4 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Disk.aspx.cs" Inherits="Disk" %>
+﻿<%--/********************************************************************/
+/*  Date	Name	Description                                 */
+/*  --------------------------------------------------------------- */
+/*                                                                  */
+/*  5/2/2019  Matthew Pugel   Initial deployed. Program accepts input.    */
+    /* Edit and Update command works */
+/********************************************************************/--%>
+<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Disk.aspx.cs" Inherits="Disk" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentHead" Runat="Server">
 </asp:Content>
@@ -34,7 +41,7 @@
         <EditItemTemplate>
             <tr style="background-color: #999999;">
                 <td>
-                    <asp:Button ID="UpdateButton" runat="server" CommandName="Update" Text="Update" />
+                    <asp:Button ID="UpdateButton" runat="server" CommandName="Update" Text="Update" ValidationGroup="Edit" />
                     <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" Text="Cancel" />
                 </td>
                 <td>
@@ -42,18 +49,37 @@
                 </td>
                 <td>
                     <asp:TextBox ID="disk_nameTextBox" runat="server" Text='<%# Bind("disk_name") %>' />
+                    
                 </td>
                 <td>
                     <asp:TextBox ID="releaseDateTextBox" runat="server" Text='<%# Bind("releaseDate") %>' />
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
+                        ErrorMessage="Enter the Day/Month/Year" CssClass="text-danger" ControlToValidate="releaseDateTextBox" ValidationGroup="Edit"></asp:RequiredFieldValidator>
+                    <asp:RegularExpressionValidator ID="RegularExpressionValidator7" runat="server" CssClass="text-danger"
+                    ControlToValidate="releaseDateTextBox" ValidationGroup="Edit" ErrorMessage="Date format in MM/DD/YYYY" ValidationExpression="[01]?\d\/[0-3]\d/\d{4}"></asp:RegularExpressionValidator>
+
                 </td>
                 <td>
-                    <asp:TextBox ID="genre_idTextBox" runat="server" Text='<%# Bind("genre_id") %>' />
+                    <asp:DropDownList ID="ddlgenre_id" 
+                        DataSourceID="SqlDataSource2"
+                        DataTextField="description" DataValueField="genre_id"
+                        SelectedValue='<%# Bind("genre_id") %>'
+                        runat="server"></asp:DropDownList>
                 </td>
                 <td>
-                    <asp:TextBox ID="status_idTextBox" runat="server" Text='<%# Bind("status_id") %>' />
+                    <asp:DropDownList ID="ddlstatus_id" 
+                        DataSourceID="SqlDataSource3"
+                        DataTextField="description" DataValueField="status_id"
+                        SelectedValue='<%# Bind("status_id") %>'
+                        runat="server"></asp:DropDownList>
                 </td>
                 <td>
-                    <asp:TextBox ID="disk_type_idTextBox" runat="server" Text='<%# Bind("disk_type_id") %>' />
+                    
+                      <asp:DropDownList ID="DropDownList2" 
+                        DataSourceID="SqlDataSource4"
+                        DataTextField="description" DataValueField="disk_type_id"
+                        SelectedValue='<%# Bind("disk_type_id") %>'
+                        runat="server"></asp:DropDownList>
                 </td>
             </tr>
         </EditItemTemplate>
@@ -73,8 +99,7 @@
                 <td>&nbsp;</td>
                 <td>
                     <asp:TextBox ID="disk_nameTextBox" runat="server" Text='<%# Bind("disk_name") %>' />
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
-                        ErrorMessage="Enter Name of Disk" CssClass="text-danger" ControlToValidate="disk_nameTextBox" ValidationGroup="Insert"></asp:RequiredFieldValidator>
+                   
                     
                 </td>
                 <td>
@@ -82,8 +107,7 @@
                              <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
                         ErrorMessage="Enter the Day/Month/Year" CssClass="text-danger" ControlToValidate="releaseDateTextBox" ValidationGroup="Insert"></asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" CssClass="text-danger"
-                    ControlToValidate="releaseDateTextBox" ValidationGroup="Insert" ErrorMessage="Date format in DD/MM/YYYY"
-                    ValidationExpression="^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\d\d$"></asp:RegularExpressionValidator>
+                    ControlToValidate="releaseDateTextBox" ValidationGroup="Insert" ErrorMessage="Date format in MM/DD/YYYY" ValidationExpression="[01]?\d\/[0-3]\d/\d{4}"></asp:RegularExpressionValidator>
                 </td>
                 <td>
                   
@@ -197,8 +221,8 @@
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:disk_inventoryConnectionString %>" 
         DeleteCommand="EXECUTE del_disk @disk_id" 
         InsertCommand="EXECUTE ins_disk @disk_name, @releaseDate, @genre_id, @status_id, @disk_type_id" 
-        SelectCommand="SELECT * FROM [disk] ORDER BY [disk_name]" 
-        UpdateCommand="EXECUTE upd_disk  @disk_id, @disk_name, @releaseDate, @genre_id, @status_id, @disk_type_id">
+        SelectCommand="SELECT * FROM [disk] ORDER BY [disk_id]" 
+        UpdateCommand="EXECUTE upd_disk   @disk_name, @releaseDate, @genre_id, @status_id, @disk_type_id, @disk_id">
         <DeleteParameters>
             <asp:Parameter Name="disk_id" Type="Int32" />
         </DeleteParameters>
@@ -210,12 +234,12 @@
             <asp:Parameter Name="disk_type_id" Type="Int32" />
         </InsertParameters>
         <UpdateParameters>
+            <asp:Parameter Name="disk_id" Type="Int32" />
             <asp:Parameter Name="disk_name" Type="String" />
             <asp:Parameter Name="releaseDate" Type="DateTime" />
             <asp:Parameter Name="genre_id" Type="Int32" />
             <asp:Parameter Name="status_id" Type="Int32" />
             <asp:Parameter Name="disk_type_id" Type="Int32" />
-            <asp:Parameter Name="disk_id" Type="Int32" />
         </UpdateParameters>
     </asp:SqlDataSource>
    <asp:SqlDataSource ID="SqlDataSource2" runat="server" 

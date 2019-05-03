@@ -198,8 +198,8 @@ figure {
 img {
   vertical-align: middle;
   border-style: none;
-    height: 31px;
-    width: 32px;
+    height: 145px;
+    width: 153px;
 }
 
 svg {
@@ -370,6 +370,7 @@ h1, h2, h3, h4, h5, h6,
 
 h1, .h1 {
   font-size: 2.5rem;
+    margin-left: 240px;
 }
 
 h2, .h2 {
@@ -4181,6 +4182,8 @@ input[type="button"].btn-block {
   font-size: 1.25rem;
   line-height: inherit;
   white-space: nowrap;
+    height: 71px;
+    width: 169px;
 }
 
 .navbar-brand:hover, .navbar-brand:focus {
